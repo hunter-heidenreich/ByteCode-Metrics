@@ -30,10 +30,7 @@ def compile_patterns(data):
     for slot in data:
         info = slot.json()['result']
         for order in info:
-            for item in order['items']:
-                for key in patterns:
-                    if key in item['name']:
-                        patterns[key] += 1
+            patterns = analyze_items(order['items'], patterns)
     save_data(patterns, 'patterns')
 
 
@@ -45,10 +42,7 @@ def compile_genders(data):
     for slot in data:
         info = slot.json()['result']
         for order in info:
-            for item in order['items']:
-                for key in genders:
-                    if key in item['name']:
-                        genders[key] += 1
+            genders = analyze_items(order['items'], genders)
     save_data(genders, 'genders')
 
 
@@ -72,11 +66,16 @@ def compile_styles(data):
     for slot in data:
         info = slot.json()['result']
         for order in info:
-            for item in order['items']:
-                for key in styles:
-                    if key in item['name']:
-                        styles[key] += 1
+            styles = analyze_items(order['items'], styles)
     save_data(styles, 'styles')
+
+
+def analyze_items(items, info):
+    for item in items:
+        for key in info:
+            if key in item['name']:
+                info[key] += 1
+    return info
 
 
 def compile_data(data, type):
