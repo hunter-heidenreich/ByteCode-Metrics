@@ -92,11 +92,27 @@ def saveData(data, type):
         for key in data:
             f.write(key + ': ' + str(data[key]) + '\n')
     print('Data saved.')
+    print()
+
+
+def chooseReport():
+    reportList = ['patterns', 'states', 'styles', 'genders', 'quit']
+    print('Report types:')
+    for report in reportList:
+        print(report)
+    print()
+    choice = input('Which report would you like to run? (Enter "quit" to exit)\n')
+    while choice not in reportList:
+        choice = input('Which report would you like to run? (Enter "quit" to exit)\n')
+    print()
+    return choice
 
 
 def main():
     data = getData()
-    compileData(data, 'patterns')
-
+    report = chooseReport()
+    while report != 'quit':
+        compileData(data, report)
+        report = chooseReport()
 
 main()
