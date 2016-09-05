@@ -5,20 +5,21 @@ import pickle
 
 api = pickle.load(open('api.p', 'rb'))
 
-def getData():
+
+def get_data():
     url = 'https://api.theprintful.com/orders'
     user = api['user']
-    passw = api['passw']
-    data = [requests.get(url, auth=HTTPBasicAuth(user, passw))]
-    orderCount = data[0].json()['paging']['total']
+    pass_w = api['passw']
+    data = [requests.get(url, auth=HTTPBasicAuth(user, pass_w))]
+    order_count = data[0].json()['paging']['total']
     loops = 1
-    while orderCount > (loops * 20):
-        data.append(requests.get(url + '?offset=' + str(loops * 20), auth=HTTPBasicAuth(user, passw)))
+    while order_count > (loops * 20):
+        data.append(requests.get(url + '?offset=' + str(loops * 20), auth=HTTPBasicAuth(user, pass_w)))
         loops += 1
     return data
 
 
-def compilePatterns(data):
+def compile_patterns(data):
     patterns = {
         'Winter Sun': 0,
         'Soothing Wave': 0,
@@ -33,10 +34,10 @@ def compilePatterns(data):
                 for key in patterns:
                     if key in item['name']:
                         patterns[key] += 1
-    saveData(patterns, 'patterns')
+    save_data(patterns, 'patterns')
 
 
-def compileGenders(data):
+def compile_genders(data):
     genders = {
         'Men': 0,
         'Women': 0
@@ -48,20 +49,20 @@ def compileGenders(data):
                 for key in genders:
                     if key in item['name']:
                         genders[key] += 1
-    saveData(genders, 'genders')
+    save_data(genders, 'genders')
 
 
-def compileStates(data):
+def compile_states(data):
     states = {}
     for slot in data:
         info = slot.json()['result']
         for order in info:
             states[order['recipient']['state_name']] = states.get(order['recipient']['state_name'], 0) \
                                                        + len(order['items'])
-    saveData(states, 'states')
+    save_data(states, 'states')
 
 
-def compileStyles(data):
+def compile_styles(data):
     styles = {
         'Tank': 0,
         'Shirt': 0,
@@ -75,19 +76,19 @@ def compileStyles(data):
                 for key in styles:
                     if key in item['name']:
                         styles[key] += 1
-    saveData(styles, 'styles')
+    save_data(styles, 'styles')
 
 
-def compileData(data, type):
+def compile_data(data, type):
     return{
-        'patterns': compilePatterns,
-        'states': compileStates,
-        'styles': compileStyles,
-        'genders': compileGenders
+        'patterns': compile_patterns,
+        'states': compile_states,
+        'styles': compile_styles,
+        'genders': compile_genders
     }[type](data)
 
 
-def saveData(data, type):
+def save_data(data, type):
     with open(type + str(datetime.datetime.now().strftime('%Y%b%d')) + '.txt', 'w+') as f:
         for key in data:
             f.write(key + ': ' + str(data[key]) + '\n')
@@ -95,24 +96,24 @@ def saveData(data, type):
     print()
 
 
-def chooseReport():
-    reportList = ['patterns', 'states', 'styles', 'genders', 'quit']
+def choose_report():
+    report_list = ['patterns', 'states', 'styles', 'genders', 'quit']
     print('Report types:')
-    for report in reportList:
+    for report in report_list:
         print(report)
     print()
     choice = input('Which report would you like to run? (Enter "quit" to exit)\n')
-    while choice not in reportList:
+    while choice not in report_list:
         choice = input('Which report would you like to run? (Enter "quit" to exit)\n')
     print()
     return choice
 
 
 def main():
-    data = getData()
-    report = chooseReport()
+    data = get_data()
+    report = choose_report()
     while report != 'quit':
-        compileData(data, report)
-        report = chooseReport()
+        compile_data(data, report)
+        report = choose_report()
 
 main()
