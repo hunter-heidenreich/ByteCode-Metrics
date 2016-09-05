@@ -27,11 +27,7 @@ def compile_patterns(data):
         'Ripples in Time': 0,
         'Cooling Core': 0
     }
-    for slot in data:
-        info = slot.json()['result']
-        for order in info:
-            patterns = analyze_items(order['items'], patterns)
-    save_data(patterns, 'patterns')
+    save_data(extract_orders(data, patterns), 'patterns')
 
 
 def compile_genders(data):
@@ -39,11 +35,7 @@ def compile_genders(data):
         'Men': 0,
         'Women': 0
     }
-    for slot in data:
-        info = slot.json()['result']
-        for order in info:
-            genders = analyze_items(order['items'], genders)
-    save_data(genders, 'genders')
+    save_data(extract_orders(data, genders), 'genders')
 
 
 def compile_states(data):
@@ -63,11 +55,15 @@ def compile_styles(data):
         'Socks': 0,
         'Leggings': 0
     }
+    save_data(extract_orders(data, styles), 'styles')
+
+
+def extract_orders(data, metric):
     for slot in data:
         info = slot.json()['result']
         for order in info:
-            styles = analyze_items(order['items'], styles)
-    save_data(styles, 'styles')
+            metric = analyze_items(order['items'], metric)
+    return metric
 
 
 def analyze_items(items, info):
