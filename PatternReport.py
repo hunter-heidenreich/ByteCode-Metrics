@@ -25,7 +25,10 @@ def compile_patterns(data):
         'Soothing Wave': 0,
         'Natural Explosion': 0,
         'Ripples in Time': 0,
-        'Cooling Core': 0
+        'Cooling Core': 0,
+        'Feathered Breath': 0,
+        'GL!TCH': 0,
+        'Parallax Shift': 0
     }
     save_data(extract_orders(data, patterns), 'patterns')
 
