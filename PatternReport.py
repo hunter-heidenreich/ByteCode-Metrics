@@ -96,17 +96,20 @@ def save_data(data, type):
     print()
 
     if input('Would you like to create a pie chart? (y to select)\n') == 'y':
-        labels = [x for x in data.keys()]
-        sizes = [x for x in data.values()]
-        colors = []
-        for x in range(0, len(sizes)):
-            colors.append(get_color(x))
-        explode = [0 for x in data.values()]
-        explode[randint(0, len(explode) - 1)] = 0.1
-        plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=90)
-        plt.axis('equal')
-        plt.show()
+        draw_pie(data)
 
+
+def draw_pie(data):
+    labels = [x for x in data.keys()]
+    sizes = [x for x in data.values()]
+    colors = []
+    for x in range(0, len(sizes)):
+        colors.append(get_color(x))
+    explode = [0 for x in data.values()]
+    explode[randint(0, len(explode) - 1)] = 0.1
+    plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=90)
+    plt.axis('equal')
+    plt.show()
 
 
 def get_color(num):
