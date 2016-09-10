@@ -117,6 +117,7 @@ def get_color(num):
           'purple', 'pink', 'violet']
     return li[num]
 
+
 def choose_report():
     report_list = ['patterns', 'states', 'styles', 'genders', 'quit']
     print('Report types:')
