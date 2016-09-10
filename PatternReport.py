@@ -2,6 +2,8 @@ import requests
 import datetime
 from requests.auth import HTTPBasicAuth
 import pickle
+import matplotlib.pyplot as plt
+from random import randint
 
 api = pickle.load(open('api.p', 'rb'))
 
@@ -93,6 +95,24 @@ def save_data(data, type):
     print('Data saved.')
     print()
 
+    if input('Would you like to create a pie chart? (y to select)\n') == 'y':
+        labels = [x for x in data.keys()]
+        sizes = [x for x in data.values()]
+        colors = []
+        for x in range(0, len(sizes)):
+            colors.append(get_color(x))
+        explode = [0 for x in data.values()]
+        explode[randint(0, len(explode) - 1)] = 0.1
+        plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=90)
+        plt.axis('equal')
+        plt.show()
+
+
+
+def get_color(num):
+    li = ['yellowgreen', 'gold', 'blue', 'lightcoral', 'red', 'green', 'orange',
+          'purple', 'pink', 'violet']
+    return li[num]
 
 def choose_report():
     report_list = ['patterns', 'states', 'styles', 'genders', 'quit']
