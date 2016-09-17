@@ -7,6 +7,8 @@ from random import randint
 
 api = pickle.load(open('api.p', 'rb'))
 
+internal = False
+
 
 def get_data():
     url = 'https://api.theprintful.com/orders'
@@ -48,7 +50,8 @@ def compile_states(data):
     for slot in data:
         info = slot.json()['result']
         for order in info:
-            states[order['recipient']['state_name']] = states.get(order['recipient']['state_name'], 0) \
+            if order['external_id'] or internal:
+                states[order['recipient']['state_name']] = states.get(order['recipient']['state_name'], 0) \
                                                        + len(order['items'])
     save_data(states, 'states')
 
@@ -67,7 +70,8 @@ def extract_orders(data, metric):
     for slot in data:
         info = slot.json()['result']
         for order in info:
-            metric = analyze_items(order['items'], metric)
+            if order['external_id'] or internal:
+                metric = analyze_items(order['items'], metric)
     return metric
 
 
@@ -131,10 +135,18 @@ def choose_report():
     return choice
 
 
+def decide_internal():
+    global internal
+    c = input('Count internal orders? (y/n)\n')
+    print()
+    internal = (c == 'y')
+
+
 def main():
     data = get_data()
     report = choose_report()
     while report != 'quit':
+        decide_internal()
         compile_data(data, report)
         report = choose_report()
 
