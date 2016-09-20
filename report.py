@@ -32,7 +32,9 @@ def compile_patterns(data):
         'Cooling Core': 0,
         'Feathered Breath': 0,
         'GL!TCH': 0,
-        'Parallax Shift': 0
+        'Parallax Shift': 0,
+        'Digital Twilight': 0,
+        'Mahogany Stone': 0
     }
     save_data(extract_orders(data, patterns), 'patterns')
 
