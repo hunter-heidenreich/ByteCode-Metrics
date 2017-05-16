@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import requests
 import datetime
 from requests.auth import HTTPBasicAuth
@@ -39,12 +41,12 @@ def compile_patterns(data):
     save_data(extract_orders(data, patterns), 'patterns')
 
 
-def compile_genders(data):
-    genders = {
+def compile_sex(data):
+    sex = {
         'Men': 0,
         'Women': 0
     }
-    save_data(extract_orders(data, genders), 'genders')
+    save_data(extract_orders(data, sex), 'sex')
 
 
 def compile_states(data):
@@ -90,7 +92,7 @@ def compile_data(data, type):
         'patterns': compile_patterns,
         'states': compile_states,
         'styles': compile_styles,
-        'genders': compile_genders
+        'sex': compile_sex
     }[type](data)
 
 
@@ -125,7 +127,7 @@ def get_color(num):
 
 
 def choose_report():
-    report_list = ['patterns', 'states', 'styles', 'genders', 'quit']
+    report_list = ['patterns', 'states', 'styles', 'sex', 'quit']
     print('Report types:')
     for report in report_list:
         print(report)
@@ -152,4 +154,5 @@ def main():
         compile_data(data, report)
         report = choose_report()
 
-main()
+if __name__ == '__main__':
+    main()
